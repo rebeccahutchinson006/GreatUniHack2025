@@ -36,6 +36,31 @@ pip install -e ".[dev]"
    brew install redis
    ```
 
+## Setup
+
+### Environment Configuration
+
+1. Copy the example environment file:
+   ```bash
+   cp .env.example .env
+   ```
+
+2. Edit `.env` and add your DeepL API key:
+   ```bash
+   DEEPL_API_KEY=your_actual_deepl_api_key_here
+   ```
+
+3. (Optional) Load the environment variables:
+   ```bash
+   # Load for current session
+   source .env
+   
+   # Or export manually
+   export DEEPL_API_KEY="your-deepl-api-key"
+   ```
+
+**Note**: The `.env` file is already in [`.gitignore`](.gitignore) to prevent accidentally committing your API keys.
+
 ## Quick Start
 
 ### Basic Usage

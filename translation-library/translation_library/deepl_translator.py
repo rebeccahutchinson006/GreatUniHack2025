@@ -23,7 +23,15 @@ class DeepLTranslator:
         if not self.api_key:
             raise TranslationError("DeepL API key is required. Set DEEPL_API_KEY environment variable or pass api_key parameter.")
         
-        self.base_url = "https://api.deepl.com/v2/translate"
+        # Auto-detect API endpoint based on key type
+        # Free API keys end with ':fx', Pro keys don't
+        if self.api_key.endswith(':fx'):
+            self.base_url = "https://api-free.deepl.com/v2/translate"
+            self.usage_url = "https://api-free.deepl.com/v2/usage"
+        else:
+            self.base_url = "https://api.deepl.com/v2/translate"
+            self.usage_url = "https://api.deepl.com/v2/usage"
+        
         self.use_cache = use_cache
         self.cache = TranslationCache() if use_cache else None
         
@@ -143,7 +151,7 @@ class DeepLTranslator:
         
         try:
             response = requests.get(
-                'https://api.deepl.com/v2/usage',
+                self.usage_url,
                 headers=headers,
                 timeout=10
             )
