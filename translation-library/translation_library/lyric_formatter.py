@@ -44,5 +44,10 @@ class LyricFormatter:
         """
         # Remove excessive whitespace but preserve structure
         text = re.sub(r'[ \t]+', ' ', text)
-        text = re.sub(r'\n\s+\n', '\n\n', text)
+        # Replace multiple newlines with double newline
+        text = re.sub(r'\n{3,}', '\n\n', text)
+        # Strip whitespace from each line
+        lines = text.split('\n')
+        lines = [line.strip() for line in lines]
+        text = '\n'.join(lines)
         return text.strip()

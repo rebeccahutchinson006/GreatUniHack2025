@@ -1,11 +1,19 @@
 import os
-import redis
 import json
 import hashlib
 from typing import Optional
 
+try:
+    import redis
+    REDIS_AVAILABLE = True
+except ImportError:
+    REDIS_AVAILABLE = False
+    redis = None
+
 class TranslationCache:
     def __init__(self, redis_url: Optional[str] = None):
+        if not REDIS_AVAILABLE:
+            raise ImportError("Redis is not installed. Install it with: pip install redis")
         self.redis_client = redis.from_url(
             redis_url or os.getenv('REDIS_URL', 'redis://localhost:6379')
         )
