@@ -213,8 +213,19 @@ class LyricsTTS:
         
         # Step 2: Determine best voice if not specified
         if not voice_name and not voice_id:
-            # Use the best voice for this language from the predefined mapping
-            voice_name = self.tts.get_best_voice_for_language(target_lang)
+            # Try to use the best voice for this language from the predefined mapping
+            suggested_voice = self.tts.get_best_voice_for_language(target_lang)
+            
+            # Verify the suggested voice exists before using it
+            if suggested_voice:
+                try:
+                    voice_check = self.tts.get_voice_by_name(suggested_voice)
+                    if voice_check:
+                        voice_name = suggested_voice
+                    # If not found, voice_name stays None and will auto-select
+                except Exception:
+                    # If there's any error checking the voice, fall back to auto-select
+                    pass
         
         # Step 3: Generate audio from translated lyrics
         # Map language codes to ISO codes for TTS

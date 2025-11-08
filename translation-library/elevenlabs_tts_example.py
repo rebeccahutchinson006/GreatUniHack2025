@@ -73,7 +73,7 @@ def example_3_multiple_languages():
     """
     
     # Generate audio in multiple languages
-    languages = ['ES', 'FR', 'DE', 'IT', 'JA']
+    languages = ['ES', 'FR', 'DE', 'IT', 'JA','AR','EL']
     
     results = lyrics_tts.batch_translate_and_speak(
         lyrics=lyrics,
@@ -107,8 +107,8 @@ def example_4_custom_voices():
     if voices:
         result = lyrics_tts.translate_and_speak(
             lyrics=lyrics,
-            target_lang="FR",
-            output_path="output/french_custom_voice.mp3",
+            target_lang="AR",
+            output_path="output/arabic_custom_voice.mp3",
             voice_name=voices[0]['name']
         )
         print(f"\nGenerated with voice '{result['voice_name']}'")
@@ -126,7 +126,7 @@ def example_5_play_audio():
     # Generate audio
     result = lyrics_tts.translate_and_speak(
         lyrics=lyrics,
-        target_lang="EN",
+        target_lang="FR",
         output_path="output/test_playback.mp3",
         auto_play=False
     )
@@ -148,27 +148,56 @@ def example_6_long_lyrics():
     
     lyrics_tts = LyricsTTS()
     
+    # long_lyrics = """
+    # In the beginning, there was music
+    # It echoed through the empty halls
+    # Each note a promise, each chord a story
+    # Weaving through time like golden thread
+    
+    # Through every season, through every change
+    # The melody remained the same
+    # A constant companion in life's journey
+    # Guiding us home when we lose our way
+    
+    # And when the silence finally comes
+    # The music still plays in our hearts
+    # A timeless echo of love and life
+    # Forever dancing in the stars
+    # """
     long_lyrics = """
-    In the beginning, there was music
-    It echoed through the empty halls
-    Each note a promise, each chord a story
-    Weaving through time like golden thread
-    
-    Through every season, through every change
-    The melody remained the same
-    A constant companion in life's journey
-    Guiding us home when we lose our way
-    
-    And when the silence finally comes
-    The music still plays in our hearts
-    A timeless echo of love and life
-    Forever dancing in the stars
-    """
+    Ground Control to Major Tom
+    Ground Control to Major Tom
+    Take your protein pills and put your helmet on
+    Ground Control to Major Tom (ten, nine, eight, seven, six)
+    Commencing countdown, engines on (five, four, three, two)
+    Check ignition and may God's love be with you (one, lift off)
+    This is Ground Control to Major Tom
+    You've really made the grade
+    And the papers want to know whose shirts you wear
+    Now it's time to leave the capsule if you dare
+    This is Major Tom to Ground Control
+    I'm stepping through the door
+    And I'm floating in a most peculiar way
+    And the stars look very different today
+    For here
+    Am I sitting in a tin can
+    Far above the world
+    Planet Earth is blue
+    And there's nothing I can do
+    Though I'm past one hundred thousand miles
+    I'm feeling very still
+    And I think my spaceship knows which way to go
+    Tell my wife I love her very much she knows
+    Ground Control to Major Tom
+    Your circuit's dead, there's something wrong
+    Can you hear me, Major Tom?
+    Can you hear me, Major Tom?
+    Can you hear me, Major Tom? Can you-"""
     
     result = lyrics_tts.translate_and_speak(
         lyrics=long_lyrics,
-        target_lang="IT",
-        output_path="output/long_italian.mp3"
+        target_lang="ES",
+        output_path="output/long_french.mp3"
     )
     
     print(f"Long lyrics translated and converted to audio")
@@ -224,13 +253,13 @@ def main():
     
     try:
         # Run examples
-        example_1_basic_tts()
-        example_2_translate_and_speak()
-        # example_3_multiple_languages()
-        example_4_custom_voices()
-        example_5_play_audio()
+        #example_1_basic_tts()
+        #example_2_translate_and_speak()
+        #example_3_multiple_languages()
+        #example_4_custom_voices()
+        #example_5_play_audio()
         example_6_long_lyrics()
-        example_7_check_usage()
+        #example_7_check_usage()
         
         print("\n" + "=" * 60)
         print("All examples completed!")

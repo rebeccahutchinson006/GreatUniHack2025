@@ -10,24 +10,28 @@ from .exceptions import TranslationError
 
 
 # Default best voice recommendations per language
-# These are commonly available voices that work well for each language
+# These are commonly available voices that work well for each language.
+# NOTE: If a suggested voice is not available in your account, the system
+# will automatically fall back to selecting a suitable multilingual voice.
 BEST_VOICES_PER_LANGUAGE = {
-    'EN': 'Rachel',      # English - American female
-    'EN-US': 'Rachel',   # English (US) - American female
-    'EN-GB': 'Charlotte', # English (UK) - British female
-    'ES': 'Matilda',     # Spanish - female
-    'FR': 'Charlotte',   # French - female
+    'EN': 'Sarah',       # English - American female
+    'EN-US': 'Sarah',    # English (US) - American female
+    'EN-GB': 'Alice',    # English (UK) - British female
+    'ES': 'Matilda',     # Spanish - female (supports multilingual)
+    'FR': 'River',       # French - neutral voice (#7)
     'DE': 'Daniel',      # German - male
-    'IT': 'Gianna',      # Italian - female
-    'PT': 'Camila',      # Portuguese - female
-    'PT-BR': 'Camila',   # Portuguese (Brazil) - female
-    'JA': None,          # Japanese - auto-select multilingual
-    'ZH': None,          # Chinese - auto-select multilingual
+    'IT': 'River',       # Italian - neutral voice
+    'PT': 'River',       # Portuguese - neutral voice
+    'PT-BR': 'River',    # Portuguese (Brazil) - neutral voice
+    'JA': 'Alice',       # Japanese - female (supports ja)
+    'ZH': 'River',       # Chinese - neutral voice
     'KO': None,          # Korean - auto-select multilingual
     'RU': None,          # Russian - auto-select multilingual
-    'AR': None,          # Arabic - auto-select multilingual
+    'AR': 'Sarah',       # Arabic - female (supports ar)
     'NL': 'Daniel',      # Dutch - male
-    'PL': None,          # Polish - auto-select multilingual
+    'PL': 'Alice',       # Polish - female (supports pl)
+    'HI': 'Sarah',       # Hindi - female (supports hi)
+    'CS': 'George',      # Czech - male (supports cs)
 }
 
 
