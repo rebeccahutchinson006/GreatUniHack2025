@@ -1,7 +1,8 @@
 
-import React from 'react';
-import { MusicSectionData } from '../types';
+import React, { useState } from 'react';
+import { MusicSectionData, Artist } from '../types';
 import ArtistCard from './ArtistCard';
+import ArtistPage from './ArtistSongsModal';
 
 interface CountryPageProps {
   section: MusicSectionData;
@@ -15,6 +16,17 @@ const ArrowLeftIcon = () => (
 );
 
 const CountryPage: React.FC<CountryPageProps> = ({ section, onBack }) => {
+  const [selectedArtist, setSelectedArtist] = useState<Artist | null>(null);
+
+  if (selectedArtist) {
+    return (
+      <ArtistPage
+        artist={selectedArtist}
+        onBack={() => setSelectedArtist(null)}
+      />
+    );
+  }
+
   return (
     <div className="animate-fade-in">
       <button
@@ -27,7 +39,11 @@ const CountryPage: React.FC<CountryPageProps> = ({ section, onBack }) => {
       <h1 className="text-4xl sm:text-5xl font-extrabold mb-8 tracking-tight">{section.title}</h1>
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-6">
         {section.artists.map((artist) => (
-          <ArtistCard key={artist.name} artist={artist} />
+          <ArtistCard
+            key={artist.name}
+            artist={artist}
+            onClick={() => setSelectedArtist(artist)}
+          />
         ))}
       </div>
     </div>

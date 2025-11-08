@@ -1,7 +1,8 @@
 
-import React from 'react';
-import { MusicSectionData } from '../types';
+import React, { useState } from 'react';
+import { MusicSectionData, Artist } from '../types';
 import ArtistCard from './ArtistCard';
+import ArtistPage from './ArtistSongsModal';
 
 interface MusicSectionProps {
   section: MusicSectionData;
@@ -15,6 +16,17 @@ const ArrowRightIcon = () => (
 );
 
 const MusicSection: React.FC<MusicSectionProps> = ({ section, onTitleClick }) => {
+  const [selectedArtist, setSelectedArtist] = useState<Artist | null>(null);
+
+  if (selectedArtist) {
+    return (
+      <ArtistPage
+        artist={selectedArtist}
+        onBack={() => setSelectedArtist(null)}
+      />
+    );
+  }
+
   return (
     <section>
       <div
@@ -29,7 +41,11 @@ const MusicSection: React.FC<MusicSectionProps> = ({ section, onTitleClick }) =>
       </div>
       <div className="flex overflow-x-auto space-x-4 lg:space-x-6 pb-4 -mx-4 px-4 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
         {section.artists.map((artist) => (
-          <ArtistCard key={artist.name} artist={artist} />
+          <ArtistCard
+            key={artist.name}
+            artist={artist}
+            onClick={() => setSelectedArtist(artist)}
+          />
         ))}
       </div>
     </section>

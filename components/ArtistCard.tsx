@@ -4,11 +4,12 @@ import { Artist } from '../types';
 
 interface ArtistCardProps {
   artist: Artist;
+  onClick?: () => void;
 }
 
-const ArtistCard: React.FC<ArtistCardProps> = ({ artist }) => {
+const ArtistCard: React.FC<ArtistCardProps> = ({ artist, onClick }) => {
   return (
-    <div className="flex-shrink-0 w-40 sm:w-48 group">
+    <div className="flex-shrink-0 w-40 sm:w-48 group cursor-pointer" onClick={onClick}>
       <div className="aspect-square rounded-lg overflow-hidden shadow-lg transform group-hover:scale-105 transition-transform duration-300 ease-in-out">
         <img src={artist.imageUrl} alt={artist.name} className="w-full h-full object-cover" />
       </div>

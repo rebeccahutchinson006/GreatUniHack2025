@@ -2,6 +2,7 @@
 export interface Artist {
   name: string;
   imageUrl: string;
+  topSongs: string[];
 }
 
 export interface MusicSectionData {
