@@ -1,7 +1,6 @@
 
 import React, { useState } from 'react';
 import Header from './components/Header';
-import SearchBar from './components/SearchBar';
 import MusicSection from './components/MusicSection';
 import Footer from './components/Footer';
 import CountryPage from './components/CountryPage';
@@ -29,7 +28,6 @@ function App() {
           <CountryPage section={activeSectionData} onBack={handleGoBack} />
         ) : (
           <div className="space-y-12">
-            <SearchBar />
             {MUSIC_SECTIONS.map((section) => (
               <MusicSection
                 key={section.country}

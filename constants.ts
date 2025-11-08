@@ -3,8 +3,8 @@ import { MusicSectionData } from './types';
 
 export const MUSIC_SECTIONS: MusicSectionData[] = [
   {
-    title: "Discover Tunisian Beats",
-    country: "Tunisia",
+    title: "Discover Spanish Beats",
+    country: "Spain",
     artists: [
       { name: "Balti", imageUrl: "https://picsum.photos/seed/Balti/400/400" },
       { name: "Latifa Arfaoui", imageUrl: "https://picsum.photos/seed/Latifa/400/400" },
@@ -39,8 +39,8 @@ export const MUSIC_SECTIONS: MusicSectionData[] = [
     ]
   },
     {
-    title: "Discover Nigerian Afrobeats",
-    country: "Nigeria",
+    title: "Discover German Beats",
+    country: "Germany",
     artists: [
       { name: "Burna Boy", imageUrl: "https://picsum.photos/seed/BurnaBoy/400/400" },
       { name: "Wizkid", imageUrl: "https://picsum.photos/seed/Wizkid/400/400" },
