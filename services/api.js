@@ -91,5 +91,46 @@ export const api = {
     }
     return response.json();
   },
+
+  play: async (userId) => {
+    const response = await fetch(`${API_BASE_URL}/play/${userId}`, {
+      method: 'POST',
+    });
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.detail || 'Failed to resume playback');
+    }
+    return response.json();
+  },
+
+  pause: async (userId) => {
+    const response = await fetch(`${API_BASE_URL}/pause/${userId}`, {
+      method: 'POST',
+    });
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.detail || 'Failed to pause playback');
+    }
+    return response.json();
+  },
+
+  textToSpeech: async (text, language = 'en') => {
+    const response = await fetch(`${API_BASE_URL}/text-to-speech`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        text,
+        language,
+        speed: 1.0,
+      }),
+    });
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.detail || 'Failed to generate speech');
+    }
+    return response.blob();
+  },
 };
 
