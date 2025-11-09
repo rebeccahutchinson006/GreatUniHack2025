@@ -13,6 +13,7 @@ from translation_library import DeepLTranslator, LyricFormatter
 from translation_library.exceptions import TranslationError, RateLimitError, InvalidLanguageError
 from tts_library.eleven_labs_tts import ElevenLabsTTS, ElevenLabsError
 import io
+import re
 
 # Import helper modules
 from spotify_helpers import (
@@ -849,10 +850,19 @@ async def analyze_song_lyrics(request: LyricsAnalysisRequest):
     """
     try:
         # Run the synchronous analyze_lyrics function in executor
+        # Clean the lyrics text to remove problematic characters
+        cleaned_lyrics = re.sub(r'[^\w\s\'\-,.!?;:()\[\]{}]', '', request.lyrics)
+        cleaned_lyrics = cleaned_lyrics.strip()
+        
+        # print(cleaned_lyrics)
+        
+        if not cleaned_lyrics:
+            raise HTTPException(status_code=400, detail="Lyrics text is empty after cleaning")
+            
         result = await asyncio.get_event_loop().run_in_executor(
             executor,
             analyze_lyrics,
-            request.lyrics
+            cleaned_lyrics
         )
         
         return LyricsAnalysisResponse(

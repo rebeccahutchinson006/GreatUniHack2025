@@ -1,0 +1,43 @@
+{
+  "manifest_version": 3,
+  "name": "Libby Translate - Booking.com Music",
+  "version": "1.0.0",
+  "description": "Discover music from countries you're exploring on Booking.com",
+  "permissions": [
+    "storage",
+    "activeTab",
+    "tabs",
+    "scripting"
+  ],
+  "host_permissions": [
+    "https://booking.com/*",
+    "https://*.booking.com/*",
+    "http://localhost:8000/*",
+    "https://api.spotify.com/*",
+    "https://sdk.scdn.co/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://booking.com/*", "https://*.booking.com/*"],
+      "js": ["content.js"],
+      "css": ["content.css"]
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Libby Translate"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["*.png", "*.jpg", "*.svg"],
+      "matches": ["<all_urls>"]
+    }
+  ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self' https://sdk.scdn.co; object-src 'self'"
+  }
+}
+
