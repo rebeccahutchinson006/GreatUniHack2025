@@ -45,16 +45,26 @@ export const MusicDataProvider: React.FC<MusicDataProviderProps> = ({ children }
             
             const data: BackendArtistResponse = await response.json();
             
+            console.log(`${mapping.genre} API response:`, data);
+            
             // Transform backend data to match frontend structure
-            const transformedArtists: Artist[] = data.artists.map(artist => ({
-              id: artist.id,
-              name: artist.name,
-              imageUrl: artist.image,
-              image: artist.image,
-              topSongs: artist.top_tracks,
-              top_tracks: artist.top_tracks,
-              popularity: artist.popularity
-            }));
+            const transformedArtists: Artist[] = data.artists.map(artist => {
+              console.log(`Transforming ${artist.name}:`, {
+                track_details: artist.track_details,
+                track_details_length: artist.track_details?.length
+              });
+              
+              return {
+                id: artist.id,
+                name: artist.name,
+                imageUrl: artist.image,
+                image: artist.image,
+                topSongs: artist.top_tracks,
+                top_tracks: artist.top_tracks,
+                track_details: artist.track_details,
+                popularity: artist.popularity
+              };
+            });
             
             return {
               title: mapping.title,
