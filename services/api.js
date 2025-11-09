@@ -92,6 +92,8 @@ export const api = {
     return response.json();
   },
 
+  analyzeLyrics: async (lyrics) => {
+    const response = await fetch(`${API_BASE_URL}/analyze-lyrics`, {
   play: async (userId) => {
     const response = await fetch(`${API_BASE_URL}/play/${userId}`, {
       method: 'POST',
@@ -121,6 +123,7 @@ export const api = {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
+        lyrics
         text,
         language,
         speed: 1.0,
@@ -128,9 +131,9 @@ export const api = {
     });
     if (!response.ok) {
       const error = await response.json();
-      throw new Error(error.detail || 'Failed to generate speech');
+      throw new Error(error.detail || 'Failed to analyze lyrics');
     }
-    return response.blob();
+    return response.json();
   },
 };
 

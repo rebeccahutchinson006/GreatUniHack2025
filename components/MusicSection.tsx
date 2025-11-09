@@ -29,8 +29,8 @@ const MusicSection: React.FC<MusicSectionProps> = ({ section, onTitleClick, onAr
         className="flex items-center justify-between mb-4 cursor-pointer group"
         onClick={onTitleClick}
       >
-        <h2 className="text-3xl font-bold text-white group-hover:text-purple-400 transition-colors">{section.title}</h2>
-        <div className="flex items-center text-purple-400 group-hover:text-white transition-colors">
+        <h2 className="text-3xl font-bold text-gray-100 group-hover:text-purple-300 transition-colors">{section.title}</h2>
+        <div className="flex items-center text-purple-300 group-hover:text-gray-100 transition-colors">
           <span className="hidden sm:inline mr-2 font-semibold">See All</span>
           <ArrowRightIcon />
         </div>

@@ -23,6 +23,7 @@ from spotify_helpers import (
 )
 from lyrics_helpers import get_lrc_lyrics, get_lyrics_ovh, get_genius_lyrics_sync, LyricsLine
 from translation_helpers import translate_lyrics_sync, translate_batch_sync
+from summary import analyze_lyrics
 
 # Load environment variables from .env file
 load_dotenv()
@@ -131,6 +132,15 @@ class WordTranslationResponse(BaseModel):
     translated_word: str
     target_language: str
     detected_language: Optional[str] = None
+
+
+class LyricsAnalysisRequest(BaseModel):
+    lyrics: str
+
+
+class LyricsAnalysisResponse(BaseModel):
+    summary: str
+    insights: List[str]
 
 
 @app.get("/")
@@ -430,7 +440,6 @@ async def translate_lyrics(request: TranslationRequest):
     
     try:
         # If we have synced lyrics (lines), translate each line separately
-        print("Trying plane text yay :D")
         # Translate plain text lyrics - use formatter like in example
         formatter = LyricFormatter()
         
@@ -827,6 +836,32 @@ async def get_top_artists(genre: str, limit: int = 10):
         )
 
 
+@app.post("/analyze-lyrics", response_model=LyricsAnalysisResponse)
+async def analyze_song_lyrics(request: LyricsAnalysisRequest):
+    """
+    Analyze song lyrics using Google AI Studio to extract summary and language-specific insights.
+    
+    Args:
+        request: Contains the lyrics to analyze
+        
+    Returns:
+        Summary and list of language-specific insights (idioms, puns, wordplay, etc.)
+    """
+    try:
+        # Run the synchronous analyze_lyrics function in executor
+        result = await asyncio.get_event_loop().run_in_executor(
+            executor,
+            analyze_lyrics,
+            request.lyrics
+        )
+        
+        return LyricsAnalysisResponse(
+            summary=result.get("summary", ""),
+            insights=result.get("insights", [])
+        )
+    
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
 class TTSRequest(BaseModel):
     text: str
     language: Optional[str] = "en"
@@ -902,7 +937,6 @@ async def text_to_speech(request: TTSRequest):
         traceback.print_exc()
         raise HTTPException(
             status_code=500,
-            detail=f"Unexpected error: {str(e)}"
+            detail=f"Failed to analyze lyrics: {str(e)}"
         )
-
 

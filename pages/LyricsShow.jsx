@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import '../public/Lyrics.css';
+import '../src/Lyrics.css';
 import TrackInfo from '../components/TrackInfo';
 import LyricsDisplay from '../components/LyricsDisplay';
 import { api } from '../services/api';
@@ -18,6 +18,9 @@ function LyricsShow() {
   const [supportedLanguages, setSupportedLanguages] = useState([]);
   const [overlayMode, setOverlayMode] = useState(false);
   const [overlayData, setOverlayData] = useState(null);
+  const [lyricsAnalysis, setLyricsAnalysis] = useState(null);
+  const [analysisLoading, setAnalysisLoading] = useState(false);
+  const [analysisError, setAnalysisError] = useState(null);
   const [playbackLoading, setPlaybackLoading] = useState(false);
 
   // Fetch supported languages on mount
@@ -223,6 +226,33 @@ function LyricsShow() {
     translateLinesOverlay();
   }, [lyrics, selectedLanguage, overlayMode]);
 
+  // Analyze lyrics when they change
+  useEffect(() => {
+    if (!lyrics || !lyrics.lyrics) {
+      setLyricsAnalysis(null);
+      setAnalysisError(null);
+      return;
+    }
+
+    const analyzeLyrics = async () => {
+      setAnalysisLoading(true);
+      setAnalysisError(null);
+
+      try {
+        const analysis = await api.analyzeLyrics(lyrics.lyrics);
+        setLyricsAnalysis(analysis);
+      } catch (error) {
+        console.error('Error analyzing lyrics:', error);
+        setAnalysisError(error.message || 'Failed to analyze lyrics');
+        setLyricsAnalysis(null);
+      } finally {
+        setAnalysisLoading(false);
+      }
+    };
+
+    analyzeLyrics();
+  }, [lyrics]);
+
   const handleLogin = () => {
     api.login();
   };
@@ -353,12 +383,48 @@ function LyricsShow() {
               durationMs={currentTrack?.duration_ms}
               selectedLanguage={selectedLanguage}
             />
+            {lyricsAnalysis && !lyricsLoading && (
+              <div className="lyrics-analysis">
+                <div className="analysis-section">
+                  <h3>
+                    <span className="material-icons"></span>
+                    Song Summary
+                  </h3>
+                  <p className="analysis-summary">{lyricsAnalysis.summary}</p>
+                </div>
+                {lyricsAnalysis.insights && lyricsAnalysis.insights.length > 0 && (
+                  <div className="analysis-section">
+                    <h3>
+                      <span className="material-icons"></span>
+                      Language Insights
+                    </h3>
+                    <ul className="analysis-insights">
+                      {lyricsAnalysis.insights.map((insight, index) => (
+                        <li key={index}>{insight}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                {analysisLoading && (
+                  <div className="analysis-loading">
+                    <span className="spinner-small"></span>
+                    Analyzing lyrics...
+                  </div>
+                )}
+                {analysisError && (
+                  <div className="analysis-error">
+                    <span className="material-icons"></span>
+                    {analysisError}
+                  </div>
+                )}
+              </div>
+            )}
           </>
         ) : (
           <div className="welcome-screen">
             <div className="welcome-content">
-              <h2>Welcome to Live Spotify Lyrics!</h2>
-              <p>See the lyrics of whatever you're listening to on Spotify in real-time.</p>
+              <h2>Welcome to Live Spotify Translate!</h2>
+              <p>See the lyrics and translations of what you're listening to in real time.</p>
               <button onClick={handleLogin} className="login-btn-large">
                 <span className="material-icons">login</span>
                 Login with Spotify to Get Started
