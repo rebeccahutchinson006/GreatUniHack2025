@@ -3,10 +3,12 @@ import React, { useState } from 'react';
 import { MusicSectionData, Artist } from '../types';
 import ArtistCard from './ArtistCard';
 import ArtistPage from './ArtistSongsModal';
+import Breadcrumbs from './Breadcrumbs';
 
 interface CountryPageProps {
   section: MusicSectionData;
   onBack: () => void;
+  onArtistClick?: (artist: Artist) => void;
 }
 
 const ArrowLeftIcon = () => (
@@ -15,20 +17,22 @@ const ArrowLeftIcon = () => (
     </svg>
 );
 
-const CountryPage: React.FC<CountryPageProps> = ({ section, onBack }) => {
-  const [selectedArtist, setSelectedArtist] = useState<Artist | null>(null);
-
-  if (selectedArtist) {
-    return (
-      <ArtistPage
-        artist={selectedArtist}
-        onBack={() => setSelectedArtist(null)}
-      />
-    );
-  }
+const CountryPage: React.FC<CountryPageProps> = ({ section, onBack, onArtistClick }) => {
+  const handleArtistClick = (artist: Artist) => {
+    if (onArtistClick) {
+      onArtistClick(artist);
+    }
+  };
 
   return (
     <div className="animate-fade-in">
+      <Breadcrumbs 
+        items={[
+          { label: 'Home', path: '/' },
+          { label: section.country }
+        ]}
+      />
+      
       <button
         onClick={onBack}
         className="mb-6 inline-flex items-center px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 focus:ring-purple-500"
@@ -36,13 +40,20 @@ const CountryPage: React.FC<CountryPageProps> = ({ section, onBack }) => {
         <ArrowLeftIcon />
         Back to Discover
       </button>
-      <h1 className="text-4xl sm:text-5xl font-extrabold mb-8 tracking-tight">{section.title}</h1>
+      
+      <div className="mb-8">
+        <h1 className="text-4xl sm:text-5xl font-extrabold mb-2 tracking-tight">{section.title}</h1>
+        <p className="text-gray-400 text-lg">
+          Explore {section.artists.length} top artists from {section.country}
+        </p>
+      </div>
+      
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-6">
         {section.artists.map((artist) => (
           <ArtistCard
-            key={artist.name}
+            key={artist.id || artist.name}
             artist={artist}
-            onClick={() => setSelectedArtist(artist)}
+            onClick={() => handleArtistClick(artist)}
           />
         ))}
       </div>
