@@ -1,10 +1,18 @@
 
 import { MusicSectionData } from './types';
 
+export const GENRE_MAPPINGS = [
+  { title: "Discover Spanish Beats", country: "Spain", genre: "spanish" },
+  { title: "Discover French Beats", country: "France", genre: "french" },
+  { title: "Discover Japanese Beats", country: "Japan", genre: "japanese" },
+  { title: "Discover German Beats", country: "Germany", genre: "german" }
+];
+
 export const MUSIC_SECTIONS: MusicSectionData[] = [
   {
     title: "Discover Spanish Beats",
     country: "Spain",
+    genre: "spanish",
     artists: [
       { name: "Balti", imageUrl: "https://picsum.photos/seed/Balti/400/400", topSongs: ["Ya Lili", "Mamnou3 Lwaldin", "Allo", "Hip Hop Walou", "Silence", "Sawt El Boulice", "Freestyle", "Helwa", "Gnawi", "Wled Legratte"] },
       { name: "Latifa Arfaoui", imageUrl: "https://picsum.photos/seed/Latifa/400/400", topSongs: ["Hobbek Nar", "Ya Msafer Wahdek", "Enti Menhebba", "Ayech Beyya", "Wahdi Ana", "Hob Jdid", "Nensak", "Ghram", "Tes3a W Thalatheen", "Ana W Enti"] },
@@ -17,6 +25,7 @@ export const MUSIC_SECTIONS: MusicSectionData[] = [
   {
     title: "Discover French Beats",
     country: "France",
+    genre: "french",
     artists: [
       { name: "Stromae", imageUrl: "https://picsum.photos/seed/Stromae/400/400", topSongs: ["Alors on danse", "Papaoutai", "Formidable", "Tous les mêmes", "Carmen", "Ta fête", "Quand c'est?", "Ave Cesaria", "Bâtard", "L'enfer"] },
       { name: "Aya Nakamura", imageUrl: "https://picsum.photos/seed/Aya/400/400", topSongs: ["Djadja", "Pookie", "Copines", "La dot", "Jolie nana", "Comportement", "40%", "Pompom", "Doudou", "Bobo"] },
@@ -29,6 +38,7 @@ export const MUSIC_SECTIONS: MusicSectionData[] = [
   {
     title: "Discover Japanese Beats",
     country: "Japan",
+    genre: "japanese",
     artists: [
       { name: "Aimer", imageUrl: "https://picsum.photos/seed/Aimer/400/400", topSongs: ["Brave Shine", "Kataomoi", "Hana no Uta", "Polaris", "Last Stardust", "RE:I AM", "Ref:rain", "Ninelie", "Cold Rain", "Stars in the Rain"] },
       { name: "YOASOBI", imageUrl: "https://picsum.photos/seed/YOASOBI/400/400", topSongs: ["Yoru ni Kakeru", "Gunjo", "Halzion", "Ano Yume wo Nazotte", "Tabun", "Encore", "Monster", "Tracing that Dream", "Haruka", "Adventure"] },
@@ -41,6 +51,7 @@ export const MUSIC_SECTIONS: MusicSectionData[] = [
     {
     title: "Discover German Beats",
     country: "Germany",
+    genre: "german",
     artists: [
       { name: "Burna Boy", imageUrl: "https://picsum.photos/seed/BurnaBoy/400/400", topSongs: ["Last Last", "Ye", "On the Low", "Anybody", "Gbona", "Kilometre", "Bank On It", "It's Plenty", "Common Person", "Dangote"] },
       { name: "Wizkid", imageUrl: "https://picsum.photos/seed/Wizkid/400/400", topSongs: ["Essence", "Joro", "Come Closer", "Ojuelegba", "Soco", "Fever", "Smile", "No Stress", "Ginger", "Bad To Me"] },

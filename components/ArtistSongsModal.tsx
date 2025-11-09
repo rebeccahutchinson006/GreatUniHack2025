@@ -13,6 +13,11 @@ const ArrowLeftIcon = () => (
 );
 
 const ArtistPage: React.FC<ArtistPageProps> = ({ artist, onBack }) => {
+  // Support both imageUrl and image properties
+  const imageUrl = artist.imageUrl || artist.image || 'https://picsum.photos/400/400';
+  // Support both topSongs and top_tracks properties
+  const songs = artist.topSongs || artist.top_tracks || [];
+  
   return (
     <div className="animate-fade-in">
       <button
@@ -25,17 +30,20 @@ const ArtistPage: React.FC<ArtistPageProps> = ({ artist, onBack }) => {
       
       <div className="flex items-center gap-6 mb-8">
         <div className="w-48 h-48 rounded-lg overflow-hidden shadow-2xl flex-shrink-0">
-          <img src={artist.imageUrl} alt={artist.name} className="w-full h-full object-cover" />
+          <img src={imageUrl} alt={artist.name} className="w-full h-full object-cover" />
         </div>
         <div>
           <h1 className="text-5xl font-extrabold mb-2 tracking-tight text-white">{artist.name}</h1>
-          <p className="text-purple-400 text-xl">Top 10 Songs</p>
+          <p className="text-purple-400 text-xl">Top {songs.length} Songs</p>
+          {artist.popularity && (
+            <p className="text-gray-400 text-sm mt-1">Popularity: {artist.popularity}/100</p>
+          )}
         </div>
       </div>
 
       <div className="max-w-3xl">
         <ul className="space-y-3">
-          {artist.topSongs.map((song, index) => (
+          {songs.map((song, index) => (
             <li
               key={index}
               className="flex items-center gap-4 p-4 rounded-lg bg-gray-800/50 hover:bg-gray-800 transition-colors group"

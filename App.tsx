@@ -4,8 +4,8 @@ import Header from './components/Header';
 import MusicSection from './components/MusicSection';
 import Footer from './components/Footer';
 import CountryPage from './components/CountryPage';
-import { MUSIC_SECTIONS } from './constants';
-import { MusicSectionData } from './types';
+import { MUSIC_SECTIONS, GENRE_MAPPINGS } from './constants';
+import { MusicSectionData, BackendArtistResponse, Artist } from './types';
 
 function App() {
   const [activeCountry, setActiveCountry] = useState<string | null>(null);
@@ -17,14 +17,49 @@ function App() {
     const fetchMusicData = async () => {
       try {
         setLoading(true);
-        const response = await fetch('http://localhost:5000/api/music');
         
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
+        // Fetch data for all genres in parallel
+        const fetchPromises = GENRE_MAPPINGS.map(async (mapping) => {
+          try {
+            const response = await fetch(`http://localhost:8000/top-artists/${mapping.genre}`);
+            
+            if (!response.ok) {
+              throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            
+            const data: BackendArtistResponse = await response.json();
+            
+            // Transform backend data to match frontend structure
+            const transformedArtists: Artist[] = data.artists.map(artist => ({
+              id: artist.id,
+              name: artist.name,
+              imageUrl: artist.image,
+              image: artist.image,
+              topSongs: artist.top_tracks,
+              top_tracks: artist.top_tracks,
+              popularity: artist.popularity
+            }));
+            
+            return {
+              title: mapping.title,
+              country: mapping.country,
+              genre: mapping.genre,
+              artists: transformedArtists
+            };
+          } catch (err) {
+            console.error(`Error fetching ${mapping.genre} music data:`, err);
+            // Return fallback data for this genre
+            return MUSIC_SECTIONS.find(section => section.country === mapping.country) || {
+              title: mapping.title,
+              country: mapping.country,
+              genre: mapping.genre,
+              artists: []
+            };
+          }
+        });
         
-        const data = await response.json();
-        setMusicData(data);
+        const results = await Promise.all(fetchPromises);
+        setMusicData(results);
         setError(null);
       } catch (err) {
         console.error('Error fetching music data:', err);
