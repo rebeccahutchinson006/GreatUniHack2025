@@ -9,7 +9,6 @@ from pathlib import Path
 from .deepl_translator import DeepLTranslator
 from .elevenlabs_tts import ElevenLabsTTS
 from .audio_player import AudioPlayer
-# from .lyric_formatter import LyricFormatter
 from .exceptions import TranslationError
 
 
@@ -119,6 +118,7 @@ class LyricsTTS:
         voice_id: Optional[str] = None,
         model_id: str = "eleven_multilingual_v2",
         stability: float = 0.5,
+        speed: float = 1.0,
         similarity_boost: float = 0.75
     ) -> Dict:
         """
@@ -144,6 +144,7 @@ class LyricsTTS:
                 voice_id=voice_id,
                 model_id=model_id,
                 stability=stability,
+                speed=speed,
                 similarity_boost=similarity_boost
             )
             return {
@@ -155,7 +156,8 @@ class LyricsTTS:
                 lyrics=lyrics,
                 output_path=output_path,
                 language=language,
-                voice_name=voice_name
+                voice_name=voice_name,
+                speed=speed,
             )
     
     def translate_and_speak(

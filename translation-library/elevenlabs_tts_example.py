@@ -28,7 +28,15 @@ def example_1_basic_tts():
     result = lyrics_tts.generate_audio(
         lyrics=lyrics,
         output_path="output/english.mp3",
-        language="en"
+        language="en",
+        speed = 0.8,
+        # voice_name parameter omitted - will auto-select a suitable voice
+    )
+    result2 = lyrics_tts.generate_audio(
+        lyrics=lyrics,
+        output_path="output/english2.mp3",
+        language="en",
+        speed = 1.1,
         # voice_name parameter omitted - will auto-select a suitable voice
     )
     
@@ -253,12 +261,12 @@ def main():
     
     try:
         # Run examples
-        #example_1_basic_tts()
+        example_1_basic_tts()
         #example_2_translate_and_speak()
         #example_3_multiple_languages()
         #example_4_custom_voices()
         #example_5_play_audio()
-        example_6_long_lyrics()
+        #example_6_long_lyrics()
         #example_7_check_usage()
         
         print("\n" + "=" * 60)

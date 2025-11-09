@@ -6,6 +6,7 @@ with Eleven Labs text-to-speech, caching, formatting, and music-specific optimiz
 """
 
 from .deepl_translator import DeepLTranslator
+from .lyric_formatter import LyricFormatter
 from .translation_cache import TranslationCache
 from .exceptions import TranslationError, RateLimitError, InvalidLanguageError
 from .elevenlabs_tts import ElevenLabsTTS, ElevenLabsError, VoiceNotFoundError, AudioGenerationError

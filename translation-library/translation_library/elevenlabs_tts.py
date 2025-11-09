@@ -173,6 +173,7 @@ class ElevenLabsTTS:
         stability: float = 0.5,
         similarity_boost: float = 0.75,
         style: float = 0.0,
+        speed: float = 1.0,
         use_speaker_boost: bool = True
     ) -> bytes:
         """
@@ -216,6 +217,7 @@ class ElevenLabsTTS:
                 "stability": stability,
                 "similarity_boost": similarity_boost,
                 "style": style,
+                "speed": speed,
                 "use_speaker_boost": use_speaker_boost
             }
         }
@@ -250,6 +252,7 @@ class ElevenLabsTTS:
         stability: float = 0.5,
         similarity_boost: float = 0.75,
         style: float = 0.0,
+        speed: float = 1.0,
         use_speaker_boost: bool = True
     ) -> str:
         """
@@ -281,6 +284,7 @@ class ElevenLabsTTS:
             stability=stability,
             similarity_boost=similarity_boost,
             style=style,
+            speed=speed,
             use_speaker_boost=use_speaker_boost
         )
         
@@ -305,6 +309,7 @@ class ElevenLabsTTS:
         output_path: str,
         language: str = "en",
         voice_name: Optional[str] = None,
+        speed: float = 1.0,
         auto_select_voice: bool = True
     ) -> Dict[str, str]:
         """
@@ -359,7 +364,8 @@ class ElevenLabsTTS:
             output_path=output_path,
             voice_id=voice_id,
             voice_name=voice_name,
-            model_id=model_id
+            model_id=model_id,
+            speed=speed,
         )
         
         return {
