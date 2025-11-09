@@ -168,6 +168,7 @@ class LyricsTTS:
         source_lang: Optional[str] = None,
         voice_name: Optional[str] = None,
         voice_id: Optional[str] = None,
+        speed: float = 1.0,
         preserve_formatting: bool = True,
         auto_play: bool = False
     ) -> Dict:
@@ -181,6 +182,7 @@ class LyricsTTS:
             source_lang: Source language (auto-detected if None).
             voice_name: Name of the voice to use.
             voice_id: ID of the voice (alternative to voice_name).
+            speed: dictates speed of output.
             preserve_formatting: Whether to preserve lyric formatting.
             auto_play: Whether to automatically play the audio after generation.
         
@@ -244,7 +246,8 @@ class LyricsTTS:
             output_path=output_path,
             language=language_code,
             voice_name=voice_name,
-            voice_id=voice_id
+            voice_id=voice_id,
+            speed=speed,
         )
         
         # Combine results
@@ -263,69 +266,6 @@ class LyricsTTS:
             self.play_audio(audio_result['audio_path'])
         
         return result
-    
-    # def batch_translate_and_speak(
-    #     self,
-    #     lyrics: str,
-    #     target_languages: List[str],
-    #     output_dir: str,
-    #     base_filename: str = "lyrics",
-    #     source_lang: Optional[str] = None,
-    #     voice_settings: Optional[Dict[str, str]] = None
-    # ) -> List[Dict]:
-    #     """
-    #     Translate and generate audio for lyrics in multiple languages.
-        
-    #     Args:
-    #         lyrics: Original lyrics text.
-    #         target_languages: List of target language codes.
-    #         output_dir: Directory to save all audio files.
-    #         base_filename: Base name for output files.
-    #         source_lang: Source language (auto-detected if None).
-    #         voice_settings: Optional dict mapping language codes to voice names/IDs.
-        
-    #     Returns:
-    #         List of result dictionaries, one for each language.
-        
-    #     Example:
-    #         >>> results = lyrics_tts.batch_translate_and_speak(
-    #         ...     lyrics="I love music",
-    #         ...     target_languages=['ES', 'FR', 'DE', 'JA'],
-    #         ...     output_dir="./multilingual_lyrics"
-    #         ... )
-    #     """
-    #     # Create output directory
-    #     os.makedirs(output_dir, exist_ok=True)
-        
-    #     results = []
-    #     voice_settings = voice_settings or {}
-        
-    #     for lang in target_languages:
-    #         output_path = os.path.join(
-    #             output_dir,
-    #             f"{base_filename}_{lang.lower()}.mp3"
-    #         )
-            
-    #         # Get voice for this language if specified
-    #         voice_name = voice_settings.get(lang)
-            
-    #         try:
-    #             result = self.translate_and_speak(
-    #                 lyrics=lyrics,
-    #                 target_lang=lang,
-    #                 output_path=output_path,
-    #                 source_lang=source_lang,
-    #                 voice_name=voice_name
-    #             )
-    #             results.append(result)
-    #         except Exception as e:
-    #             results.append({
-    #                 'target_lang': lang,
-    #                 'error': str(e),
-    #                 'success': False
-    #             })
-        
-    #     return results
     
     def play_audio(self, audio_path: str, blocking: bool = True):
         """
@@ -356,44 +296,44 @@ class LyricsTTS:
         """
         return self.tts.get_multilingual_voices()
     
-    def filter_voices_by_characteristics(
-        self,
-        gender: Optional[str] = None,
-        accent: Optional[str] = None,
-        age: Optional[str] = None,
-        use_case: Optional[str] = None,
-        description: Optional[str] = None
-    ) -> List[Dict]:
-        """
-        Filter voices by specific characteristics.
+    # def filter_voices_by_characteristics(
+    #     self,
+    #     gender: Optional[str] = None,
+    #     accent: Optional[str] = None,
+    #     age: Optional[str] = None,
+    #     use_case: Optional[str] = None,
+    #     description: Optional[str] = None
+    # ) -> List[Dict]:
+    #     """
+    #     Filter voices by specific characteristics.
         
-        Args:
-            gender: Filter by gender (e.g., "male", "female").
-            accent: Filter by accent (e.g., "british", "american", "australian").
-            age: Filter by age (e.g., "young", "middle aged", "old").
-            use_case: Filter by use case (e.g., "narration", "news", "conversational").
-            description: Filter by description text (case-insensitive substring match).
+    #     Args:
+    #         gender: Filter by gender (e.g., "male", "female").
+    #         accent: Filter by accent (e.g., "british", "american", "australian").
+    #         age: Filter by age (e.g., "young", "middle aged", "old").
+    #         use_case: Filter by use case (e.g., "narration", "news", "conversational").
+    #         description: Filter by description text (case-insensitive substring match).
         
-        Returns:
-            List of voices matching the specified criteria.
+    #     Returns:
+    #         List of voices matching the specified criteria.
         
-        Example:
-            >>> lyrics_tts = LyricsTTS()
-            >>> # Find female British voices
-            >>> voices = lyrics_tts.filter_voices_by_characteristics(
-            ...     gender='female',
-            ...     accent='british'
-            ... )
-            >>> for voice in voices:
-            ...     print(f"{voice['name']} - {voice.get('labels', {})}")
-        """
-        return self.tts.filter_voices_by_characteristics(
-            gender=gender,
-            accent=accent,
-            age=age,
-            use_case=use_case,
-            description=description
-        )
+    #     Example:
+    #         >>> lyrics_tts = LyricsTTS()
+    #         >>> # Find female British voices
+    #         >>> voices = lyrics_tts.filter_voices_by_characteristics(
+    #         ...     gender='female',
+    #         ...     accent='british'
+    #         ... )
+    #         >>> for voice in voices:
+    #         ...     print(f"{voice['name']} - {voice.get('labels', {})}")
+    #     """
+    #     return self.tts.filter_voices_by_characteristics(
+    #         gender=gender,
+    #         accent=accent,
+    #         age=age,
+    #         use_case=use_case,
+    #         description=description
+    #     )
     
     # def get_recommended_voices(
     #     self,

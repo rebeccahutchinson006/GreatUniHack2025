@@ -205,7 +205,8 @@ def example_6_long_lyrics():
     result = lyrics_tts.translate_and_speak(
         lyrics=long_lyrics,
         target_lang="ES",
-        output_path="output/long_french.mp3"
+        output_path="output/long_french.mp3",
+        speed=1.1,
     )
     
     print(f"Long lyrics translated and converted to audio")
@@ -261,11 +262,11 @@ def main():
     
     try:
         # Run examples
-        example_1_basic_tts()
+        #example_1_basic_tts()
         #example_2_translate_and_speak()
         #example_3_multiple_languages()
         #example_4_custom_voices()
-        #example_5_play_audio()
+        example_5_play_audio()
         #example_6_long_lyrics()
         #example_7_check_usage()
         
