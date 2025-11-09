@@ -1,9 +1,11 @@
 import React from 'react';
 import { Artist } from '../types';
+import Breadcrumbs from './Breadcrumbs';
 
 interface ArtistPageProps {
   artist: Artist;
   onBack: () => void;
+  genreName?: string;
 }
 
 const ArrowLeftIcon = () => (
@@ -12,7 +14,7 @@ const ArrowLeftIcon = () => (
   </svg>
 );
 
-const ArtistPage: React.FC<ArtistPageProps> = ({ artist, onBack }) => {
+const ArtistPage: React.FC<ArtistPageProps> = ({ artist, onBack, genreName }) => {
   // Support both imageUrl and image properties
   const imageUrl = artist.imageUrl || artist.image || 'https://picsum.photos/400/400';
   // Support both topSongs and top_tracks properties
@@ -20,6 +22,16 @@ const ArtistPage: React.FC<ArtistPageProps> = ({ artist, onBack }) => {
   
   return (
     <div className="animate-fade-in">
+      {genreName && (
+        <Breadcrumbs 
+          items={[
+            { label: 'Home', path: '/' },
+            { label: genreName, path: `/genre/${genreName.toLowerCase()}` },
+            { label: artist.name }
+          ]}
+        />
+      )}
+      
       <button
         onClick={onBack}
         className="mb-6 inline-flex items-center px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 focus:ring-purple-500"

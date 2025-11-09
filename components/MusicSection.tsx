@@ -7,6 +7,7 @@ import ArtistPage from './ArtistSongsModal';
 interface MusicSectionProps {
   section: MusicSectionData;
   onTitleClick: () => void;
+  onArtistClick?: (artist: Artist) => void;
 }
 
 const ArrowRightIcon = () => (
@@ -15,17 +16,12 @@ const ArrowRightIcon = () => (
   </svg>
 );
 
-const MusicSection: React.FC<MusicSectionProps> = ({ section, onTitleClick }) => {
-  const [selectedArtist, setSelectedArtist] = useState<Artist | null>(null);
-
-  if (selectedArtist) {
-    return (
-      <ArtistPage
-        artist={selectedArtist}
-        onBack={() => setSelectedArtist(null)}
-      />
-    );
-  }
+const MusicSection: React.FC<MusicSectionProps> = ({ section, onTitleClick, onArtistClick }) => {
+  const handleArtistClick = (artist: Artist) => {
+    if (onArtistClick) {
+      onArtistClick(artist);
+    }
+  };
 
   return (
     <section>
@@ -42,9 +38,9 @@ const MusicSection: React.FC<MusicSectionProps> = ({ section, onTitleClick }) =>
       <div className="flex overflow-x-auto space-x-4 lg:space-x-6 pb-4 -mx-4 px-4 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
         {section.artists.map((artist) => (
           <ArtistCard
-            key={artist.name}
+            key={artist.id || artist.name}
             artist={artist}
-            onClick={() => setSelectedArtist(artist)}
+            onClick={() => handleArtistClick(artist)}
           />
         ))}
       </div>
