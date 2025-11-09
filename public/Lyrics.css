@@ -387,3 +387,144 @@ body {
     justify-content: center;
   }
 }
+
+/* Lyrics Analysis Section */
+.lyrics-analysis {
+  margin-top: 2rem;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.analysis-section {
+  margin-bottom: 2rem;
+}
+
+.analysis-section:last-child {
+  margin-bottom: 0;
+}
+
+.analysis-section h3 {
+  color: #ffffff;
+  font-size: 1.3rem;
+  font-weight: 700;
+  font-family: 'Poppins', sans-serif;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.analysis-section h3 .material-icons {
+  font-size: 1.5rem;
+  color: #ffd700;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.analysis-summary {
+  color: #f0f0ff;
+  font-size: 1.05rem;
+  line-height: 1.7;
+  font-weight: 400;
+  font-family: 'Poppins', sans-serif;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.1);
+  padding: 1.2rem;
+  border-radius: 12px;
+  border-left: 4px solid rgba(255, 215, 0, 0.6);
+}
+
+.analysis-insights {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.analysis-insights li {
+  color: #f0f0ff;
+  font-size: 1rem;
+  line-height: 1.6;
+  font-weight: 400;
+  font-family: 'Poppins', sans-serif;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.1);
+  padding: 1rem 1.2rem;
+  border-radius: 10px;
+  margin-bottom: 0.8rem;
+  border-left: 3px solid rgba(138, 43, 226, 0.6);
+  transition: all 0.3s ease;
+}
+
+.analysis-insights li:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateX(5px);
+}
+
+.analysis-insights li:last-child {
+  margin-bottom: 0;
+}
+
+.analysis-insights li::before {
+  content: "💡";
+  margin-right: 0.8rem;
+  font-size: 1.2rem;
+}
+
+.analysis-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+  color: #f0f0ff;
+  font-size: 1rem;
+  font-weight: 500;
+  font-family: 'Poppins', sans-serif;
+  padding: 1.5rem;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.analysis-error {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #ffb3b3;
+  font-size: 0.95rem;
+  font-weight: 500;
+  font-family: 'Poppins', sans-serif;
+  padding: 1rem;
+  background: rgba(255, 0, 0, 0.1);
+  border-radius: 10px;
+  border-left: 3px solid rgba(255, 0, 0, 0.5);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.analysis-error .material-icons {
+  font-size: 1.2rem;
+  color: #ffb3b3;
+}
+
+@media (max-width: 768px) {
+  .lyrics-analysis {
+    padding: 1.5rem;
+    margin-top: 1.5rem;
+  }
+
+  .analysis-section h3 {
+    font-size: 1.1rem;
+  }
+
+  .analysis-summary {
+    font-size: 0.95rem;
+    padding: 1rem;
+  }
+
+  .analysis-insights li {
+    font-size: 0.9rem;
+    padding: 0.8rem 1rem;
+  }
+}

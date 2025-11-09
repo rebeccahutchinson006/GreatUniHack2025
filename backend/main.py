@@ -259,7 +259,7 @@ async def callback(code: Optional[str] = None, state: Optional[str] = None, erro
         }
         
         # Redirect to frontend with token
-        frontend_url = f"http://localhost:3000?user_id={user_id}"
+        frontend_url = f"http://localhost:3000/lyrics?user_id={user_id}"
         print(f"[DEBUG] Redirecting to frontend: {frontend_url}")
         return RedirectResponse(url=frontend_url)
 
@@ -381,7 +381,6 @@ async def translate_lyrics(request: TranslationRequest):
     
     try:
         # If we have synced lyrics (lines), translate each line separately
-        print("Trying plane text yay :D")
         # Translate plain text lyrics - use formatter like in example
         formatter = LyricFormatter()
         

@@ -23,6 +23,7 @@ def list_available_models():
     try:
         response = requests.get(list_url, timeout=10)
         if response.status_code == 200:
+            print(response)
             models_data = response.json()
             if "models" in models_data:
                 print("Available models:")
