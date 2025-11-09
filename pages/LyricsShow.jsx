@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import '../public/Lyrics.css';
+import '../src/Lyrics.css';
 import TrackInfo from '../components/TrackInfo';
 import LyricsDisplay from '../components/LyricsDisplay';
 import { api } from '../services/api';

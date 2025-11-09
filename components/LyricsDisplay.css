@@ -1,13 +1,11 @@
 .lyrics-container {
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 15px;
+  background: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
   padding: 2rem;
   flex: 1;
   overflow-y: auto;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   max-height: 600px;
 }
 
@@ -19,9 +17,8 @@
   align-items: center;
   justify-content: center;
   min-height: 300px;
-  color: #f0f0ff;
-  font-family: 'Poppins', sans-serif;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  color: #6b6b6b;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 }
 
 .loading {
@@ -29,8 +26,8 @@
 }
 
 .spinner {
-  border: 4px solid rgba(255, 255, 255, 0.2);
-  border-top: 4px solid #ffffff;
+  border: 4px solid #e0e0e0;
+  border-top: 4px solid #0071c2;
   border-radius: 50%;
   width: 50px;
   height: 50px;
@@ -38,7 +35,7 @@
 }
 
 .error {
-  color: #ffb3b3;
+  color: #c62828;
 }
 
 .error .material-icons {
@@ -47,10 +44,9 @@
 }
 
 .error-hint {
-  color: #e0e0ff;
+  color: #6b6b6b;
   font-size: 0.9rem;
   margin-top: 0.5rem;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .lyrics-content {
@@ -58,36 +54,35 @@
 }
 
 .lyrics-text {
-  color: #e8e8ff;
+  color: #262626;
   font-size: 1.1rem;
   line-height: 2;
-  font-family: 'Poppins', sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   white-space: pre-wrap;
   word-wrap: break-word;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .lyrics-line {
   margin-bottom: 1rem;
   padding: 0.5rem;
-  border-radius: 8px;
-  transition: all 0.3s ease;
+  border-radius: 4px;
+  transition: all 0.2s ease;
   opacity: 0.5;
-  color: #d0d0ff;
+  color: #9e9e9e;
 }
 
 .lyrics-line.near-active {
   opacity: 0.75;
-  color: #e0e0ff;
+  color: #6b6b6b;
 }
 
 .lyrics-line.active {
   opacity: 1;
-  background: rgba(255, 255, 255, 0.1);
-  color: #ffffff;
+  background: #e8f4fd;
+  color: #003580;
   font-weight: 600;
   transform: scale(1.02);
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  border-left: 3px solid #0071c2;
 }
 
 .lyrics-line-empty {
@@ -101,17 +96,15 @@
 }
 
 .overlay-original {
-  color: #f5f5ff;
+  color: #262626;
   font-size: 1.1rem;
   font-weight: 500;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .overlay-translated {
-  color: #d8d8ff;
+  color: #6b6b6b;
   font-size: 0.95rem;
   font-style: italic;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .lyrics-word {
@@ -123,21 +116,20 @@
 }
 
 .lyrics-word:hover {
-  background: rgba(255, 255, 255, 0.15);
-  color: #ffffff;
+  background: #e8f4fd;
+  color: #003580;
 }
 
 .lyrics-word.translated {
-  background: rgba(255, 255, 255, 0.1);
+  background: #f0f0f0;
 }
 
 .word-translation-popup {
-  background: rgba(30, 30, 50, 0.95);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 10px;
+  background: #ffffff;
+  border: 1px solid #bdbdbd;
+  border-radius: 4px;
   padding: 1rem;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
   z-index: 1000;
   min-width: 200px;
 }
@@ -146,35 +138,35 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  color: #ffffff;
-  font-family: 'Poppins', sans-serif;
+  color: #262626;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   position: relative;
 }
 
 .word-translation-original {
   font-size: 1rem;
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.9);
+  color: #003580;
 }
 
 .word-translation-arrow {
-  color: rgba(255, 255, 255, 0.5);
+  color: #9e9e9e;
   font-size: 1.2rem;
 }
 
 .word-translation-translated {
   font-size: 1rem;
   font-weight: 500;
-  color: #ffffff;
+  color: #262626;
 }
 
 .word-translation-close {
   position: absolute;
   top: -0.5rem;
   right: -0.5rem;
-  background: rgba(255, 255, 255, 0.2);
-  border: none;
-  color: #ffffff;
+  background: #f5f5f5;
+  border: 1px solid #e0e0e0;
+  color: #6b6b6b;
   width: 24px;
   height: 24px;
   border-radius: 50%;
@@ -187,8 +179,8 @@
 }
 
 .word-translation-close:hover {
-  background: rgba(255, 255, 255, 0.3);
-  transform: scale(1.1);
+  background: #e0e0e0;
+  border-color: #bdbdbd;
 }
 
 @media (max-width: 768px) {

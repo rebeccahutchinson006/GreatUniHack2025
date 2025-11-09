@@ -41,55 +41,57 @@ const ArtistPage: React.FC<ArtistPageProps> = ({ artist, onBack, genreName }) =>
   };
   
   return (
-    <div className="animate-fade-in">
-      {genreName && (
-        <Breadcrumbs 
-          items={[
-            { label: 'Home', path: '/' },
-            { label: genreName, path: `/genre/${genreName.toLowerCase()}` },
-            { label: artist.name }
-          ]}
-        />
-      )}
-      
-      <div className="flex gap-4 mb-6">
-        <button
-          onClick={onBack}
-          className="inline-flex items-center px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 focus:ring-purple-500"
-        >
-          <ArrowLeftIcon />
-          Back
-        </button>
-        
-        <button
-          onClick={handleGoToLyrics}
-          className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-semibold rounded-full transition-all transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 focus:ring-purple-500"
-        >
-          <MusicIcon />
-          View Live Lyrics
-        </button>
-      </div>
-      
-      <div className="flex items-center gap-6 mb-8">
-        <div className="w-48 h-48 rounded-lg overflow-hidden shadow-2xl flex-shrink-0">
-          <img src={imageUrl} alt={artist.name} className="w-full h-full object-cover" />
-        </div>
-        <div>
-          <h1 className="text-5xl font-extrabold mb-2 tracking-tight text-white">{artist.name}</h1>
-          <p className="text-purple-400 text-xl">Top {songs.length} Songs</p>
-          {artist.popularity && (
-            <p className="text-gray-400 text-sm mt-1">Popularity: {artist.popularity}/100</p>
+    <div className="relative -mx-4 sm:-mx-6 lg:-mx-8 -my-8" style={{ width: '100vw', marginLeft: 'calc(-50vw + 50%)' }}>
+      <div className="bg-slate-700 w-full py-12 min-h-screen">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 animate-fade-in">
+          {genreName && (
+            <Breadcrumbs
+              items={[
+                { label: 'Home', path: '/' },
+                { label: genreName, path: `/genre/${genreName.toLowerCase()}` },
+                { label: artist.name }
+              ]}
+            />
           )}
-        </div>
-      </div>
+          
+          <div className="flex gap-4 mb-6">
+            <button
+              onClick={onBack}
+              className="inline-flex items-center px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-700 focus:ring-purple-500"
+            >
+              <ArrowLeftIcon />
+              Back
+            </button>
+            
+            <button
+              onClick={handleGoToLyrics}
+              className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-semibold rounded-full transition-all transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-700 focus:ring-purple-500"
+            >
+              <MusicIcon />
+              View Live Lyrics
+            </button>
+          </div>
+          
+          <div className="flex items-center gap-6 mb-8">
+            <div className="w-48 h-48 rounded-lg overflow-hidden shadow-2xl flex-shrink-0">
+              <img src={imageUrl} alt={artist.name} className="w-full h-full object-cover" />
+            </div>
+            <div>
+              <h1 className="text-5xl font-extrabold mb-2 tracking-tight text-gray-100">{artist.name}</h1>
+              <p className="text-purple-300 text-xl">Top {songs.length} Songs</p>
+              {artist.popularity && (
+                <p className="text-gray-300 text-sm mt-1">Popularity: {artist.popularity}/100</p>
+              )}
+            </div>
+          </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Track List */}
         <div className="max-w-3xl">
-          <h2 className="text-2xl font-bold text-white mb-4">
+          <h2 className="text-2xl font-bold text-gray-100 mb-4">
             Track List
             {trackDetails.length > 0 && (
-              <span className="ml-3 text-sm text-purple-400 font-normal">Click to play →</span>
+              <span className="ml-3 text-sm text-purple-300 font-normal">Click to play →</span>
             )}
           </h2>
           <ul className="space-y-3">
@@ -113,7 +115,7 @@ const ArtistPage: React.FC<ArtistPageProps> = ({ artist, onBack, genreName }) =>
                     <span className={`text-lg block transition-colors ${
                       selectedTrack?.id === track.id
                         ? 'text-purple-100 font-semibold'
-                        : 'text-white group-hover:text-purple-100'
+                        : 'text-gray-100 group-hover:text-purple-100'
                     }`}>{track.name}</span>
                     {selectedTrack?.id === track.id && (
                       <span className="text-xs text-purple-300 mt-1 flex items-center gap-1">
@@ -146,7 +148,7 @@ const ArtistPage: React.FC<ArtistPageProps> = ({ artist, onBack, genreName }) =>
                   className="flex items-center gap-4 p-4 rounded-lg bg-gray-800/50 hover:bg-gray-800 transition-colors group"
                 >
                   <span className="text-purple-400 font-bold text-2xl w-12 text-center group-hover:text-purple-300 transition-colors">{index + 1}</span>
-                  <span className="text-white text-lg flex-grow group-hover:text-purple-100 transition-colors">{song}</span>
+                  <span className="text-gray-100 text-lg flex-grow group-hover:text-purple-100 transition-colors">{song}</span>
                 </li>
               ))
             )}
@@ -155,7 +157,7 @@ const ArtistPage: React.FC<ArtistPageProps> = ({ artist, onBack, genreName }) =>
         
         {/* Spotify Embed Player */}
         <div className="lg:sticky lg:top-6 h-fit">
-          <h2 className="text-2xl font-bold text-white mb-4">Now Playing</h2>
+          <h2 className="text-2xl font-bold text-gray-100 mb-4">Now Playing</h2>
           {selectedTrack ? (
             <div className="bg-gray-800/50 rounded-lg p-4 backdrop-blur-sm">
               <div className="mb-4">
@@ -183,6 +185,8 @@ const ArtistPage: React.FC<ArtistPageProps> = ({ artist, onBack, genreName }) =>
               </div>
             </div>
           )}
+        </div>
+          </div>
         </div>
       </div>
     </div>

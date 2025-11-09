@@ -17,27 +17,33 @@ const HomePage: React.FC = () => {
   };
 
   return (
-    <>
-      <div className="text-center mb-12">
-        <h1 className="text-5xl sm:text-6xl font-extrabold mb-4 bg-gradient-to-r from-purple-400 via-pink-500 to-purple-600 bg-clip-text text-transparent">
-          Discover Music From Around the World
-        </h1>
-        <p className="text-gray-300 text-lg sm:text-xl max-w-2xl mx-auto">
-          Explore top artists and their most popular tracks from different cultures and genres
-        </p>
+    <div className="relative -mx-4 sm:-mx-6 lg:-mx-8 -my-8" style={{ width: '100vw', marginLeft: 'calc(-50vw + 50%)' }}>
+      {/* Top section with dark blue background */}
+      <div className="bg-gradient-to-b from-gray-900 to-gray-800 w-full py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h1 className="text-4xl sm:text-5xl font-extrabold mb-4 text-white">
+            Colliding cultures, unifying music
+          </h1>
+          <p className="text-gray-300 text-lg sm:text-xl max-w-2xl mx-auto">
+            Explore top artists and learn languages with tracks from your dream destinations.
+          </p>
+        </div>
       </div>
       
-      <div className="space-y-12">
-        {musicData.map((section) => (
-          <MusicSection
-            key={section.country}
-            section={section}
-            onTitleClick={() => handleSelectGenre(section.country)}
-            onArtistClick={(artist) => handleSelectArtist(artist, section.country)}
-          />
-        ))}
+      {/* Bottom section with darker blueish grey background - full width */}
+      <div className="bg-slate-700 w-full py-12 min-h-screen">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+          {musicData.map((section) => (
+            <MusicSection
+              key={section.country}
+              section={section}
+              onTitleClick={() => handleSelectGenre(section.country)}
+              onArtistClick={(artist) => handleSelectArtist(artist, section.country)}
+            />
+          ))}
+        </div>
       </div>
-    </>
+    </div>
   );
 };
 
