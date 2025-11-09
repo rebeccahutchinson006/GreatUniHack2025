@@ -1,0 +1,325 @@
+/* Styles for the music player injected into booking.com */
+
+#libby-music-player {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 400px;
+  max-height: 80vh;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  z-index: 10000;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.libby-player-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.libby-player-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  background: linear-gradient(135deg, #1DB954 0%, #1ed760 100%);
+  color: white;
+}
+
+.libby-player-header h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.libby-close-btn {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 20px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+
+.libby-close-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.libby-player-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+}
+
+/* Login Section */
+.libby-login-section {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.libby-login-section p {
+  margin: 0 0 20px 0;
+  color: #666;
+  font-size: 14px;
+}
+
+.libby-spotify-btn {
+  background: #1DB954;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 24px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+}
+
+.libby-spotify-btn:hover {
+  background: #1ed760;
+  transform: scale(1.05);
+}
+
+.libby-spotify-btn:active {
+  transform: scale(0.95);
+}
+
+/* Player Section */
+.libby-player-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+/* Circular Player */
+.libby-circular-player {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.libby-progress-ring {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: rotate(-90deg);
+}
+
+.libby-progress-ring-circle {
+  transition: stroke-dashoffset 0.3s linear;
+}
+
+.libby-play-pause-btn {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: #1DB954;
+  border: none;
+  color: white;
+  font-size: 32px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  z-index: 1;
+  box-shadow: 0 4px 12px rgba(29, 185, 84, 0.3);
+}
+
+.libby-play-pause-btn:hover {
+  background: #1ed760;
+  transform: scale(1.1);
+  box-shadow: 0 6px 16px rgba(29, 185, 84, 0.4);
+}
+
+.libby-play-pause-btn:active {
+  transform: scale(0.95);
+}
+
+.libby-play-icon,
+.libby-pause-icon {
+  display: inline-block;
+}
+
+/* Track Info */
+.libby-track-info {
+  text-align: center;
+  width: 100%;
+}
+
+.libby-track-name {
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.libby-artist-name {
+  font-size: 14px;
+  color: #666;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Lyrics Container */
+.libby-lyrics-container {
+  width: 100%;
+  max-height: 300px;
+  overflow-y: auto;
+  padding: 16px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  margin: 10px 0;
+}
+
+.libby-lyrics-text {
+  font-size: 14px;
+  line-height: 1.8;
+  color: #333;
+}
+
+.libby-lyrics-line {
+  padding: 6px 8px;
+  margin: 4px 0;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  opacity: 0.5;
+  color: #666;
+}
+
+.libby-lyrics-line.near-active {
+  opacity: 0.75;
+  color: #444;
+}
+
+.libby-lyrics-line.active {
+  opacity: 1;
+  background: #e8f5e9;
+  color: #1DB954;
+  font-weight: 600;
+  transform: scale(1.02);
+  border-left: 3px solid #1DB954;
+}
+
+.libby-lyrics-loading,
+.libby-lyrics-error {
+  text-align: center;
+  padding: 20px;
+  color: #666;
+  font-size: 14px;
+}
+
+.libby-lyrics-error {
+  color: #d32f2f;
+}
+
+/* Playlist Info */
+.libby-playlist-info {
+  text-align: center;
+  margin-bottom: 15px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.libby-playlist-status {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1DB954;
+  margin-bottom: 4px;
+}
+
+.libby-playlist-progress {
+  font-size: 12px;
+  color: #666;
+}
+
+/* Loading Section */
+.libby-loading-section {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.libby-spinner {
+  border: 4px solid #e0e0e0;
+  border-top: 4px solid #1DB954;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 20px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Explore Link */
+.libby-explore-link {
+  text-align: center;
+  padding: 10px 0;
+}
+
+.libby-explore-link a {
+  color: #1DB954;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.libby-explore-link a:hover {
+  color: #1ed760;
+  text-decoration: underline;
+}
+
+/* Scrollbar styling */
+.libby-lyrics-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.libby-lyrics-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.libby-lyrics-container::-webkit-scrollbar-thumb {
+  background: #1DB954;
+  border-radius: 3px;
+}
+
+.libby-lyrics-container::-webkit-scrollbar-thumb:hover {
+  background: #1ed760;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  #libby-music-player {
+    width: calc(100vw - 40px);
+    right: 20px;
+    left: 20px;
+    bottom: 20px;
+  }
+}
+
