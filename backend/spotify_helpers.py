@@ -142,6 +142,8 @@ async def get_top_tracks_by_artist_id(
             for track in tracks[:limit]:
                 top_tracks.append({
                     "name": track["name"],
+                    "id": track["id"],
+                    "uri": track["uri"],
                     "popularity": track["popularity"],
                     "preview_url": track.get("preview_url")
                 })
