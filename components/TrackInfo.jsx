@@ -1,8 +1,8 @@
 import React from 'react';
 import './TrackInfo.css';
 
-const TrackInfo = ({ track }) => {
-  if (!track || !track.is_playing) {
+const TrackInfo = ({ track, playbackButton }) => {
+  if (!track) {
     return (
       <div className="track-info">
         <div className="no-track">
@@ -15,6 +15,7 @@ const TrackInfo = ({ track }) => {
 
   return (
     <div className="track-info">
+      {playbackButton && <div className="playback-control-overlay">{playbackButton}</div>}
       {track.album_art && (
         <img src={track.album_art} alt={track.album_name} className="album-art" />
       )}

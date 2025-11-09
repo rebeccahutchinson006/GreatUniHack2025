@@ -5,13 +5,14 @@ import { api } from '../services/api';
 const Word = ({ word, selectedLanguage, onTranslation }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [translation, setTranslation] = useState(null);
+  const [detectedLanguage, setDetectedLanguage] = useState(null);
   const [isTranslating, setIsTranslating] = useState(false);
 
   const handleClick = async (e) => {
     e.stopPropagation();
     
     if (translation) {
-      onTranslation(word, translation, e);
+      onTranslation(word, translation, selectedLanguage, detectedLanguage, e);
       return;
     }
 
@@ -21,10 +22,11 @@ const Word = ({ word, selectedLanguage, onTranslation }) => {
     try {
       const result = await api.translateWord(word, selectedLanguage);
       setTranslation(result.translated_word);
-      onTranslation(word, result.translated_word, e);
+      setDetectedLanguage(result.detected_language);
+      onTranslation(word, result.translated_word, selectedLanguage, result.detected_language, e);
     } catch (error) {
       console.error('Error translating word:', error);
-      onTranslation(word, word, e); // Fallback to original word
+      onTranslation(word, word, selectedLanguage, null, e); // Fallback to original word
     } finally {
       setIsTranslating(false);
     }
@@ -50,6 +52,9 @@ const LyricsDisplay = ({ lyrics, overlayData, isLoading, error, progressMs, dura
   const [isSynced, setIsSynced] = useState(false);
   const [wordTranslation, setWordTranslation] = useState(null);
   const [translationPosition, setTranslationPosition] = useState({ x: 0, y: 0 });
+  const [audioCache, setAudioCache] = useState({});
+  const [isPlayingAudio, setIsPlayingAudio] = useState(false);
+  const audioRef = useRef(null);
 
   // Split text into words (preserving punctuation and spaces)
   const splitIntoWords = (text) => {
@@ -59,14 +64,85 @@ const LyricsDisplay = ({ lyrics, overlayData, isLoading, error, progressMs, dura
     return words;
   };
 
-  const handleWordTranslation = (word, translation, event) => {
-    if (event) {
-      // Position popup near the cursor, but keep it on screen
-      const x = Math.min(event.clientX + 10, window.innerWidth - 250);
-      const y = Math.max(event.clientY - 50, 10);
+  const handleWordTranslation = (word, translation, targetLanguage, detectedLanguage, event) => {
+    if (event && lyricsRef.current) {
+      // Get the position of the lyrics container
+      const containerRect = lyricsRef.current.getBoundingClientRect();
+      
+      // Calculate position relative to the container with slight offset
+      const x = event.clientX - containerRect.left + 5;
+      const y = event.clientY - containerRect.top - 10;
+      
       setTranslationPosition({ x, y });
     }
-    setWordTranslation({ word, translation });
+    setWordTranslation({ 
+      word, 
+      translation, 
+      targetLanguage, 
+      detectedLanguage 
+    });
+  };
+
+  const handleSpeakerClick = async () => {
+    if (!wordTranslation || isPlayingAudio) return;
+
+    console.log(wordTranslation);
+
+    const { translation, targetLanguage } = wordTranslation;
+    const cacheKey = `${translation}_${targetLanguage}`;
+
+    try {
+      setIsPlayingAudio(true);
+
+      // Stop and cleanup any currently playing audio first
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.src = '';
+        audioRef.current.load();
+        audioRef.current = null;
+      }
+
+      // Check if audio is already cached
+      let audioUrl = audioCache[cacheKey];
+
+      if (!audioUrl) {
+        // Fetch audio from backend
+        const audioBlob = await api.textToSpeech(wordTranslation.word, wordTranslation.detectedLanguage);
+        audioUrl = URL.createObjectURL(audioBlob);
+        
+        // Cache the audio URL
+        setAudioCache(prev => ({
+          ...prev,
+          [cacheKey]: audioUrl
+        }));
+      }
+
+      // Create and play the audio
+      const audio = new Audio();
+      audioRef.current = audio;
+      
+      audio.onended = () => {
+        setIsPlayingAudio(false);
+        audioRef.current = null;
+      };
+
+      audio.onerror = (e) => {
+        setIsPlayingAudio(false);
+        audioRef.current = null;
+        console.error('Error playing audio:', e);
+      };
+
+      // Set source and load before playing
+      audio.src = audioUrl;
+      audio.load();
+      await audio.play();
+    } catch (error) {
+      console.error('Error generating or playing speech:', error);
+      setIsPlayingAudio(false);
+      if (audioRef.current) {
+        audioRef.current = null;
+      }
+    }
   };
 
   // Close translation popup when clicking outside
@@ -79,6 +155,21 @@ const LyricsDisplay = ({ lyrics, overlayData, isLoading, error, progressMs, dura
     document.addEventListener('click', handleClickOutside);
     return () => document.removeEventListener('click', handleClickOutside);
   }, []);
+
+  // Cleanup audio cache on unmount
+  useEffect(() => {
+    return () => {
+      // Revoke all cached audio URLs to free memory
+      Object.values(audioCache).forEach(url => {
+        URL.revokeObjectURL(url);
+      });
+      // Stop any playing audio
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current = null;
+      }
+    };
+  }, [audioCache]);
 
   // Parse lyrics into lines (for normal mode)
   useEffect(() => {
@@ -210,12 +301,12 @@ const LyricsDisplay = ({ lyrics, overlayData, isLoading, error, progressMs, dura
   }
 
   return (
-    <div className="lyrics-container" ref={lyricsRef}>
+    <div className="lyrics-container" ref={lyricsRef} style={{ position: 'relative' }}>
       {wordTranslation && (
         <div 
           className="word-translation-popup"
           style={{
-            position: 'fixed',
+            position: 'absolute',
             left: `${translationPosition.x}px`,
             top: `${translationPosition.y}px`,
             zIndex: 1000
@@ -226,6 +317,17 @@ const LyricsDisplay = ({ lyrics, overlayData, isLoading, error, progressMs, dura
             <div className="word-translation-original">{wordTranslation.word}</div>
             <div className="word-translation-arrow">→</div>
             <div className="word-translation-translated">{wordTranslation.translation}</div>
+            <button 
+              className={`word-translation-speaker ${isPlayingAudio ? 'playing' : ''}`}
+              onClick={handleSpeakerClick}
+              disabled={isPlayingAudio}
+              aria-label="Play pronunciation"
+              title="Play pronunciation"
+            >
+              <span className="material-icons">
+                {isPlayingAudio ? 'volume_up' : 'volume_up'}
+              </span>
+            </button>
             <button 
               className="word-translation-close"
               onClick={() => setWordTranslation(null)}
@@ -249,13 +351,31 @@ const LyricsDisplay = ({ lyrics, overlayData, isLoading, error, progressMs, dura
                 return <div key={index} className="lyrics-line-empty"></div>;
               }
               
+              // Split original text into clickable words
+              const originalWords = splitIntoWords(line.text);
+              
               return (
                 <div
                   key={index}
                   ref={isActive ? activeLineRef : null}
                   className={`lyrics-line overlay-line ${isActive ? 'active' : ''} ${isNearActive ? 'near-active' : ''}`}
                 >
-                  <div className="overlay-original">{line.text}</div>
+                  <div className="overlay-original">
+                    {originalWords.map((word, wordIndex) => {
+                      // Only make actual words clickable (skip pure whitespace)
+                      if (word.trim() === '') {
+                        return <span key={wordIndex}>{word}</span>;
+                      }
+                      return (
+                        <Word
+                          key={wordIndex}
+                          word={word}
+                          selectedLanguage={selectedLanguage}
+                          onTranslation={handleWordTranslation}
+                        />
+                      );
+                    })}
+                  </div>
                   <div className="overlay-translated">{line.translated}</div>
                 </div>
               );

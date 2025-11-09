@@ -21,6 +21,7 @@ function LyricsShow() {
   const [lyricsAnalysis, setLyricsAnalysis] = useState(null);
   const [analysisLoading, setAnalysisLoading] = useState(false);
   const [analysisError, setAnalysisError] = useState(null);
+  const [playbackLoading, setPlaybackLoading] = useState(false);
 
   // Fetch supported languages on mount
   useEffect(() => {
@@ -108,7 +109,7 @@ function LyricsShow() {
 
   // Fetch lyrics when track changes
   useEffect(() => {
-    if (!currentTrack || !currentTrack.is_playing) {
+    if (!currentTrack) {
       setLyrics(null);
       setTranslatedLyrics(null);
       setLastTrackId(null);
@@ -264,6 +265,35 @@ function LyricsShow() {
     localStorage.removeItem('spotify_user_id');
   };
 
+  const handlePlaybackToggle = async () => {
+    if (!userId || !currentTrack || playbackLoading) return;
+
+    setPlaybackLoading(true);
+    try {
+      if (currentTrack.is_playing) {
+        await api.pause(userId);
+      } else {
+        await api.play(userId);
+      }
+      // Wait a moment then fetch updated status
+      setTimeout(async () => {
+        try {
+          const data = await api.getCurrentlyPlaying(userId);
+          if (data && data.item) {
+            setCurrentTrack(data);
+          }
+        } catch (error) {
+          console.error('Error refreshing playback state:', error);
+        }
+      }, 500);
+    } catch (error) {
+      console.error('Error toggling playback:', error);
+      alert(error.message || 'Failed to control playback. Make sure Spotify is open and playing.');
+    } finally {
+      setPlaybackLoading(false);
+    }
+  };
+
   return (
     <div className="App">
       <header className="App-header">
@@ -287,7 +317,23 @@ function LyricsShow() {
       <main className="App-main">
         {userId ? (
           <>
-            <TrackInfo track={currentTrack} />
+            <TrackInfo 
+              track={currentTrack}
+              playbackButton={
+                currentTrack && (
+                  <button
+                    className={`playback-btn ${playbackLoading ? 'loading' : ''}`}
+                    onClick={handlePlaybackToggle}
+                    disabled={playbackLoading}
+                    title={currentTrack.is_playing ? 'Pause' : 'Play'}
+                  >
+                    <span className="material-icons">
+                      {playbackLoading ? 'hourglass_empty' : (currentTrack.is_playing ? 'pause' : 'play_arrow')}
+                    </span>
+                  </button>
+                )
+              }
+            />
             {lyrics && !lyricsLoading && (
               <div className="language-selector">
                 <label htmlFor="language-select">
