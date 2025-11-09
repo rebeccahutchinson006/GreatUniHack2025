@@ -1,6 +1,6 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import RedirectResponse
+from fastapi.responses import RedirectResponse, StreamingResponse
 from pydantic import BaseModel
 import httpx
 import os
@@ -11,6 +11,8 @@ import asyncio
 from concurrent.futures import ThreadPoolExecutor
 from translation_library import DeepLTranslator, LyricFormatter
 from translation_library.exceptions import TranslationError, RateLimitError, InvalidLanguageError
+from tts_library.eleven_labs_tts import ElevenLabsTTS, ElevenLabsError
+import io
 
 # Import helper modules
 from spotify_helpers import (
@@ -46,6 +48,9 @@ GENIUS_ACCESS_TOKEN = os.getenv("GENIUS_ACCESS_TOKEN", "")
 
 # DeepL API key for translation
 DEEPL_API_KEY = os.getenv("DEEPL_API_KEY", "")
+
+# Eleven Labs API key for text-to-speech
+ELEVENLABS_API_KEY = os.getenv("ELEVENLABS_API_KEY", "")
 
 # Thread pool executor for running synchronous operations
 executor = ThreadPoolExecutor(max_workers=2)
@@ -154,7 +159,7 @@ async def login():
         raise HTTPException(status_code=500, detail="Spotify Client Secret not configured")
     
     state = secrets.token_urlsafe(32)
-    scope = "user-read-currently-playing user-read-playback-state"
+    scope = "user-read-currently-playing user-read-playback-state user-modify-playback-state"
     
     # URL encode the redirect URI
     from urllib.parse import quote
@@ -308,6 +313,60 @@ async def get_currently_playing(user_id: str):
             progress_ms=data.get("progress_ms", 0),
             duration_ms=item.get("duration_ms", 0),
         )
+
+
+@app.post("/play/{user_id}")
+async def play_track(user_id: str):
+    """Resume playback for a user"""
+    if user_id not in user_tokens:
+        raise HTTPException(status_code=401, detail="User not authenticated")
+    
+    access_token = user_tokens[user_id]["access_token"]
+    
+    async with httpx.AsyncClient() as client:
+        response = await client.put(
+            "https://api.spotify.com/v1/me/player/play",
+            headers={"Authorization": f"Bearer {access_token}"}
+        )
+        
+        if response.status_code == 204:
+            return {"success": True, "message": "Playback resumed"}
+        elif response.status_code == 403:
+            raise HTTPException(status_code=403, detail="Premium account required")
+        elif response.status_code == 404:
+            raise HTTPException(status_code=404, detail="No active device found")
+        else:
+            raise HTTPException(
+                status_code=response.status_code,
+                detail=f"Failed to resume playback: {response.text}"
+            )
+
+
+@app.post("/pause/{user_id}")
+async def pause_track(user_id: str):
+    """Pause playback for a user"""
+    if user_id not in user_tokens:
+        raise HTTPException(status_code=401, detail="User not authenticated")
+    
+    access_token = user_tokens[user_id]["access_token"]
+    
+    async with httpx.AsyncClient() as client:
+        response = await client.put(
+            "https://api.spotify.com/v1/me/player/pause",
+            headers={"Authorization": f"Bearer {access_token}"}
+        )
+        
+        if response.status_code == 204:
+            return {"success": True, "message": "Playback paused"}
+        elif response.status_code == 403:
+            raise HTTPException(status_code=403, detail="Premium account required")
+        elif response.status_code == 404:
+            raise HTTPException(status_code=404, detail="No active device found")
+        else:
+            raise HTTPException(
+                status_code=response.status_code,
+                detail=f"Failed to pause playback: {response.text}"
+            )
 
 
 @app.get("/lyrics/{track_name}/{artist_name}")
@@ -766,4 +825,84 @@ async def get_top_artists(genre: str, limit: int = 10):
             status_code=500,
             detail=f"Failed to fetch top artists: {str(e)}"
         )
+
+
+class TTSRequest(BaseModel):
+    text: str
+    language: Optional[str] = "en"
+    voice_name: Optional[str] = None
+    speed: Optional[float] = 1.0
+    stability: Optional[float] = 0.5
+    similarity_boost: Optional[float] = 0.75
+
+
+@app.post("/text-to-speech")
+async def text_to_speech(request: TTSRequest):
+    print("Reached here")
+    """
+    Convert text to speech using Eleven Labs API.
+    Returns an MP3 audio file.
+    
+    Args:
+        text: The text to convert to speech
+        language: Language code (e.g., "en", "es", "fr", "de")
+        voice_name: Optional specific voice name to use
+        speed: Speech speed (0.25 to 4.0, default 1.0)
+        stability: Voice stability (0.0 to 1.0, default 0.5)
+        similarity_boost: Voice similarity (0.0 to 1.0, default 0.75)
+    
+    Returns:
+        MP3 audio file as a streaming response
+    """
+    if not ELEVENLABS_API_KEY:
+        raise HTTPException(
+            status_code=500,
+            detail="Eleven Labs API key not configured. Set ELEVENLABS_API_KEY environment variable."
+        )
+    
+    try:
+        # Initialize TTS client
+        tts = ElevenLabsTTS(api_key=ELEVENLABS_API_KEY)
+        
+        # Generate audio in thread pool to avoid blocking
+        def generate_audio():
+            voice = tts.get_best_voice_for_language(request.language.upper())
+            return tts.text_to_speech(
+                text=request.text,
+                voice_name=voice,
+                model_id="eleven_multilingual_v2",
+                speed=request.speed,
+                stability=request.stability,
+                similarity_boost=request.similarity_boost,
+                use_speaker_boost=True
+            )
+        
+        # Run in executor to avoid blocking the event loop
+        audio_data = await asyncio.get_event_loop().run_in_executor(
+            executor,
+            generate_audio
+        )
+        
+        # Return audio as streaming response
+        return StreamingResponse(
+            io.BytesIO(audio_data),
+            media_type="audio/mpeg",
+            headers={
+                "Content-Disposition": "attachment; filename=speech.mp3"
+            }
+        )
+    
+    except ElevenLabsError as e:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Text-to-speech error: {str(e)}"
+        )
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        raise HTTPException(
+            status_code=500,
+            detail=f"Unexpected error: {str(e)}"
+        )
+
 

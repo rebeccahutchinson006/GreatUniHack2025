@@ -149,6 +149,7 @@
   color: #ffffff;
   font-family: 'Poppins', sans-serif;
   position: relative;
+  padding-right: 1.5rem;
 }
 
 .word-translation-original {
@@ -166,6 +167,53 @@
   font-size: 1rem;
   font-weight: 500;
   color: #ffffff;
+}
+
+.word-translation-speaker {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #ffffff;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  padding: 0;
+  flex-shrink: 0;
+}
+
+.word-translation-speaker:hover:not(:disabled) {
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.word-translation-speaker:active:not(:disabled) {
+  transform: scale(0.95);
+}
+
+.word-translation-speaker:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.word-translation-speaker.playing .material-icons {
+  animation: pulse 0.8s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+}
+
+.word-translation-speaker .material-icons {
+  font-size: 1.2rem;
 }
 
 .word-translation-close {
