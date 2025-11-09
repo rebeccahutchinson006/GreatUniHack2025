@@ -94,20 +94,27 @@ const LyricsDisplay = ({ lyrics, overlayData, isLoading, error, progressMs, dura
     try {
       setIsPlayingAudio(true);
 
+      console.log("Hey!")
+
       // Stop and cleanup any currently playing audio first
       if (audioRef.current) {
         audioRef.current.pause();
         audioRef.current.src = '';
         audioRef.current.load();
-        audioRef.current = null;
+        audioRef.current = nu
+        
+        console.log("Hey 1!");
       }
 
       // Check if audio is already cached
       let audioUrl = audioCache[cacheKey];
 
+      console.log("Hey 2!")
+
       if (!audioUrl) {
         // Fetch audio from backend
-        const audioBlob = await api.textToSpeech(wordTranslation.word, wordTranslation.detectedLanguage);
+        console.log(wordTranslation);
+        const audioBlob = await api.textToSpeech(wordTranslation.word, wordTranslation.detectedLanguage)
         audioUrl = URL.createObjectURL(audioBlob);
         
         // Cache the audio URL
@@ -120,11 +127,15 @@ const LyricsDisplay = ({ lyrics, overlayData, isLoading, error, progressMs, dura
       // Create and play the audio
       const audio = new Audio();
       audioRef.current = audio;
+
+      console.log("Hi!")
       
       audio.onended = () => {
         setIsPlayingAudio(false);
         audioRef.current = null;
       };
+
+      console.log("Hi 2!")
 
       audio.onerror = (e) => {
         setIsPlayingAudio(false);
@@ -132,10 +143,14 @@ const LyricsDisplay = ({ lyrics, overlayData, isLoading, error, progressMs, dura
         console.error('Error playing audio:', e);
       };
 
+      console.log("Hi 3!")
+
       // Set source and load before playing
       audio.src = audioUrl;
+      console.log("Hi 4!")
       audio.load();
       await audio.play();
+      console.log("Hi 5!")
     } catch (error) {
       console.error('Error generating or playing speech:', error);
       setIsPlayingAudio(false);

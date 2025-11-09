@@ -132,23 +132,36 @@ export const api = {
   },
 
   textToSpeech: async (text, language = 'en') => {
+    console.log("Hey 7???");
+
+    console.log(JSON.stringify({
+      text,
+      language,
+      speed: 1.0,
+    }));
+
+    console.log("Heyyyyy 8?")
     const response = await fetch(`${API_BASE_URL}/text-to-speech`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        lyrics,
         text,
         language,
         speed: 1.0,
       }),
     });
+
+    console.log("Heyyyyy 9?")
+
     if (!response.ok) {
       const error = await response.json();
-      throw new Error(error.detail || 'Failed to analyze lyrics');
+      throw new Error(error.detail || 'Failed to generate speech');
     }
-    return response.json();
+    console.log("heyyyyyyyyyyyyyyyy 10?!?!");
+    console.log(response);
+    return response.blob();
   },
 };
 
