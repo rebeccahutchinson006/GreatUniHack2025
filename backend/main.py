@@ -754,14 +754,20 @@ async def get_top_artists(genre: str, limit: int = 10):
             artist_data = all_tracks.get(artist["name"], {})
             tracks = artist_data.get("tracks", [])
             
+            print(f"Artist: {artist['name']}, Tracks count: {len(tracks)}")
+            if tracks:
+                print(f"First track: {tracks[0]}")
+            
             result.append({
                 "id": artist["id"],
                 "name": artist["name"],
                 "image": artist["image"],
                 "popularity": artist["popularity"],
-                "top_tracks": [track["name"] for track in tracks]
+                "top_tracks": [track["name"] for track in tracks],
+                "track_details": tracks  # Include full track details with IDs
             })
         
+        print(f"Returning {len(result)} artists with track details")
         return {"artists": result}
     
     except Exception as e:

@@ -1,4 +1,12 @@
 
+export interface Track {
+  name: string;
+  id: string;
+  uri: string;
+  popularity: number;
+  preview_url?: string;
+}
+
 export interface Artist {
   id?: string;
   name: string;
@@ -6,6 +14,7 @@ export interface Artist {
   image?: string;
   topSongs?: string[];
   top_tracks?: string[];
+  track_details?: Track[];
   popularity?: number;
 }
 
@@ -23,5 +32,6 @@ export interface BackendArtistResponse {
     image: string;
     popularity: number;
     top_tracks: string[];
+    track_details?: Track[];
   }>;
 }
