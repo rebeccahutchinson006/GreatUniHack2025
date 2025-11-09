@@ -94,6 +94,14 @@ export const api = {
 
   analyzeLyrics: async (lyrics) => {
     const response = await fetch(`${API_BASE_URL}/analyze-lyrics`, {
+      method: 'POST'
+    });
+    if (!response.ok){
+      const error = await response.json();
+      throw new Error(error.detail || 'Failed to analyse lyrics')
+    }
+  },
+
   play: async (userId) => {
     const response = await fetch(`${API_BASE_URL}/play/${userId}`, {
       method: 'POST',
@@ -123,7 +131,7 @@ export const api = {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        lyrics
+        lyrics,
         text,
         language,
         speed: 1.0,
